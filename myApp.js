@@ -24,15 +24,12 @@ app.get("/json", (req, res) => {
   res.json(msg);
 });
 
-app.get(
-  "/now",
-  (req, res, next) => {
+app.get("/now", (req, res, next) => {
     req.time = new Date().toString();
     next();
   },
   (req, res) => {
-    const curTime = { time: req.time };
-    res.json({ curTime });
+    res.json({ time: req.time });
   }
 );
 
