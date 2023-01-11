@@ -5,8 +5,8 @@ require("dotenv").config();
 let app = express();
 
 app.use((req, res, next) => {
-  const str = `${req.method} ${req.path} - ${req.ip}`;
-  console.log(str);
+  const reqInfo = `${req.method} ${req.path} - ${req.ip}`;
+  console.log(reqInfo);
   next();
 });
 
@@ -33,8 +33,22 @@ app.get("/now", (req, res, next) => {
   }
 );
 
+// https://simeon-boilerplate-express.onrender.com/freecodecamp/echo
 app.get("/:word/echo", (req, res) => {
+    if (!echo) {
+        res.sendStatus(404);
+        return;
+    }
     res.json({echo: req.params.word});
+});
+
+// https://simeon-boilerplate-express.onrender.com/name?first=Mick&last=Jagger
+app.get("/name", (req, res) => {
+    if (!req.query.first || !req.query.last) {
+        res.sendStatus(400);
+    }
+    let fullName = `${req.query.first} ${req.query.last}`;
+    res.json({name: fullName});
 });
 
 module.exports = app;
