@@ -1,6 +1,7 @@
 let express = require("express");
 const { process_params } = require("express/lib/router");
 require("dotenv").config();
+let bodyParser = require("body-parser");
 
 let app = express();
 
@@ -9,6 +10,8 @@ app.use((req, res, next) => {
   console.log(reqInfo);
   next();
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/public", express.static(__dirname + "/public"));
 
@@ -24,7 +27,9 @@ app.get("/json", (req, res) => {
   res.json(msg);
 });
 
-app.get("/now", (req, res, next) => {
+app.get(
+  "/now",
+  (req, res, next) => {
     req.time = new Date().toString();
     next();
   },
@@ -35,20 +40,20 @@ app.get("/now", (req, res, next) => {
 
 // https://simeon-boilerplate-express.onrender.com/freecodecamp/echo
 app.get("/:word/echo", (req, res) => {
-    if (!echo) {
-        res.sendStatus(404);
-        return;
-    }
-    res.json({echo: req.params.word});
+  if (!echo) {
+    res.sendStatus(404);
+    return;
+  }
+  res.json({ echo: req.params.word });
 });
 
 // https://simeon-boilerplate-express.onrender.com/name?first=Mick&last=Jagger
 app.get("/name", (req, res) => {
-    if (!req.query.first || !req.query.last) {
-        res.sendStatus(400);
-    }
-    let fullName = `${req.query.first} ${req.query.last}`;
-    res.json({name: fullName});
+  if (!req.query.first || !req.query.last) {
+    res.sendStatus(400);
+  }
+  let fullName = `${req.query.first} ${req.query.last}`;
+  res.json({ name: fullName });
 });
 
 module.exports = app;
